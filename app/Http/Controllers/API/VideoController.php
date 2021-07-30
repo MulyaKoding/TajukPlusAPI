@@ -17,10 +17,9 @@ class VideoController extends BaseController
 
     public function show($id) {
         $video = Video::find($id);
-        if (is_null($video)) {
+        if(is_null($video)) {
             return $this->sendError('Video not found.');
         }
-
         return $this->sendResponse(new VideoResource($video), 'Video detail retrieved successfully.');
     }
 }

@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\API\AccountController;
 use App\Http\Controllers\API\NewsController;
 use App\Http\Controllers\API\VideoController;
+use App\Http\Controllers\API\PlaceController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,10 @@ Route::post('register', [AccountController::class, 'register']);
 Route::post('login', [AccountController::class, 'login']);
 Route::resource('news', NewsController::class);
 Route::resource('video', VideoController::class);
+Route::get('provinces', [PlaceController::class, 'getProvinces']);
+Route::get('cities', [PlaceController::class, 'getCities']);
+Route::get('districts', [PlaceController::class, 'getDistricts']);
+Route::get('subdistricts', [PlaceController::class, 'getSubdistricts']);
 
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AccountController::class, 'logout']);
