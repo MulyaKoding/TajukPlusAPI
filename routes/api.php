@@ -24,9 +24,9 @@ Route::post('login', [AccountController::class, 'login']);
 Route::resource('news', NewsController::class);
 Route::resource('video', VideoController::class);
 Route::get('provinces', [PlaceController::class, 'getProvinces']);
-Route::get('cities', [PlaceController::class, 'getCities']);
-Route::get('districts', [PlaceController::class, 'getDistricts']);
-Route::get('subdistricts', [PlaceController::class, 'getSubdistricts']);
+Route::get('cities/{id}', [PlaceController::class, 'getCities']);
+Route::get('districts/{id}', [PlaceController::class, 'getDistricts']);
+Route::get('subdistricts/{id}', [PlaceController::class, 'getSubdistricts']);
 
 Route::middleware('auth:api')->group(function () {
     Route::post('logout', [AccountController::class, 'logout']);
