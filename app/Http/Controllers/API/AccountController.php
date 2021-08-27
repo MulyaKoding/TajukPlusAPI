@@ -46,6 +46,7 @@ class AccountController extends BaseController
             $user = Auth::user();
             $success = [
                 'token' => $user->createToken('TajukUser')->accessToken,
+                'userid' => $user->id,
                 'fullname' => $user->fullname,
                 'username' => $user->username,
                 'email' => $user->email,

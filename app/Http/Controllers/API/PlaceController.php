@@ -22,19 +22,29 @@ class PlaceController extends BaseController
     }
 
     public function getCities($id) {
-        $cities = Cities::where('prov_id', $id)->get();
-        if (is_null($cities)) {
-            return $this->sendError('Cities not found.');
+        if(!$id) {
+            $cities = Cities::all();
+            return $this->sendResponse(CityResource::collection($cities), 'Cities successfully retrieved.');
+        } else {
+            $cities = Cities::where('prov_id', $id)->get();
+            if (is_null($cities)) {
+                return $this->sendError('Cities not found.');
+            }
+            return $this->sendResponse(CityResource::collection($cities), 'Cities successfully retrieved.');
         }
-        return $this->sendResponse(CityResource::collection($cities), 'Cities successfully retrieved.');
     }
 
     public function getDistricts($id) {
+        if(!$id){
+            $districts = Districts:: all();
+            return $this -> sendResponse(DistrictResource::collection($districts),'Districts succesfully retrieved.');
+        }else{
         $districts = Districts::where('city_id', $id)->get();
         if (is_null($districts)) {
             return $this->sendError('Districts not found.');
         }
         return $this->sendResponse(DistrictResource::collection($districts), 'Districts successfully retrieved.');
+    }
     }
 
     public function getSubdistricts($id) {
