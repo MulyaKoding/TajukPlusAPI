@@ -49,15 +49,45 @@ class AccountController extends BaseController
                 'userid' => $user->id,
                 'fullname' => $user->fullname,
                 'username' => $user->username,
+                'ktp' => $user->ktp,
                 'email' => $user->email,
                 'phone' => $user->phone,
+                'province' => $user->province,
+                'city' => $user->city,
+                'district' => $user->district,
                 'term_cond' => $user->term_cond,
-                'user_type' => $user->usertype
+                'user_type' => $user->user_type
             ];
 
             return $this->sendResponse($success, 'User login successfully.');
         } else {
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
+        }
+    }
+
+    public function update_data_user(Request $request, User $user) {
+        $input = $request->all();
+        $validator = Validator::make($input, [
+            'username' => 'required',
+            'email' => 'required|email',
+            'phone' => 'required',
+            'ktp' => 'required',
+            'province' => 'required',
+            'city' => 'required',
+            'district' => 'required'
+        ]);
+        if($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        } else {
+            $user->username = $input['username'];
+            $user->email = $input['email'];
+            $user->phone = $input['phone'];
+            $user->ktp = $input['ktp'];
+            $user->province = $input['province'];
+            $user->city = $input['city'];
+            $user->district = $input['district'];
+            $user->save();
+            return $this->sendResponse('User updated successfully');
         }
     }
 
