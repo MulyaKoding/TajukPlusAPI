@@ -65,7 +65,7 @@ class AccountController extends BaseController
         }
     }
 
-    public function update_data_user(Request $request, User $user) {
+    public function update_data_user($id, Request $request) {
         $input = $request->all();
         $validator = Validator::make($input, [
             'username' => 'required',
@@ -79,15 +79,20 @@ class AccountController extends BaseController
         if($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         } else {
-            $user->username = $input['username'];
-            $user->email = $input['email'];
-            $user->phone = $input['phone'];
-            $user->ktp = $input['ktp'];
-            $user->province = $input['province'];
-            $user->city = $input['city'];
-            $user->district = $input['district'];
-            $user->save();
-            return $this->sendResponse('User updated successfully');
+            $user = User::where('id' , $id)->update([
+                'username' => $input['username'],
+                'email' => $input['email'],
+                'phone' => $input['phone'],
+                'ktp' => $input['ktp'],
+                'province' => $input['province'],
+                'city' => $input['city'],
+                'district' => $input['district']
+            ]);
+            if(!$user) {
+                return $this->sendError('Update fails.');
+            } else {
+                return $this->sendResponse('Success', 'Update success.');
+            }
         }
     }
 
