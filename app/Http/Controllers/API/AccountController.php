@@ -91,7 +91,16 @@ class AccountController extends BaseController
             if(!$user) {
                 return $this->sendError('Update fails.');
             } else {
-                return $this->sendResponse('Success', 'Update success.');
+                $success = [
+                    'username' => $input['username'],
+                    'email' => $input['email'],
+                    'phone' => $input['phone'],
+                    'ktp' => $input['ktp'],
+                    'province' => $input['province'],
+                    'city' => $input['city'],
+                    'disrict' =>$input['district']
+                ];
+                return $this->sendResponse($success, 'Update success.');
             }
         }
     }
