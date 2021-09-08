@@ -110,8 +110,5 @@ class AccountController extends BaseController
         return response()->json([
             'message' => 'Logout successfully.'
         ]);
-
     }    
-
-
 }
