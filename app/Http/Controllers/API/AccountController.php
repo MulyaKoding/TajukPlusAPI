@@ -12,25 +12,24 @@ class AccountController extends BaseController
 {
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
-            'fullname' => 'required',
-            'username' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'ktp' => 'required',
-            'province' => 'required',
-            'city' => 'required',
-            'district' => 'required',
-            'address' => 'required',
-            'password' => 'required',
-            'confirmpass' => 'required|same:password',
-            'term_cond' => 'required',
-            'user_type' => 'required'
+                'fullname' => 'required',
+                'username' => 'required',
+                'email' => 'required|email',
+                'phone' => 'required',
+                'ktp' => 'required',
+                'province' => 'required',
+                'city' => 'required',
+                'district' => 'required',
+                'address' => 'required',
+                'password' => 'required',
+                'confirmpass' => 'required|same:password',
+                'term_cond' => 'required',
+                'user_type' => 'required'
         ]);
 
         if($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
-
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
@@ -58,7 +57,6 @@ class AccountController extends BaseController
                 'term_cond' => $user->term_cond,
                 'user_type' => $user->user_type
             ];
-
             return $this->sendResponse($success, 'User login successfully.');
         } else {
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
@@ -68,13 +66,13 @@ class AccountController extends BaseController
     public function update_data_user($id, Request $request) {
         $input = $request->all();
         $validator = Validator::make($input, [
-            'username' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'ktp' => 'required',
-            'province' => 'required',
-            'city' => 'required',
-            'district' => 'required'
+                'username' => 'required',
+                'email' => 'required|email',
+                'phone' => 'required',
+                'ktp' => 'required',
+                'province' => 'required',
+                'city' => 'required',
+                'district' => 'required'
         ]);
         if($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
@@ -92,15 +90,39 @@ class AccountController extends BaseController
                 return $this->sendError('Update fails.');
             } else {
                 $success = [
-                    'username' => $input['username'],
-                    'email' => $input['email'],
-                    'phone' => $input['phone'],
-                    'ktp' => $input['ktp'],
-                    'province' => $input['province'],
-                    'city' => $input['city'],
-                    'disrict' =>$input['district']
-                ];
+                'username' => $input['username'],
+                'email' => $input['email'],
+                'phone' => $input['phone'],
+                'ktp' => $input['ktp'],
+                'province' => $input['province'],
+                'city' => $input['city'],
+                'district' => $input['district']
+            ];
                 return $this->sendResponse($success, 'Update success.');
+            }
+        }
+    }
+
+    public function update_password($id, Request $request) {
+        $input = $request-> all();
+        $validator = Validator::make($input, [
+                'lastpass' => 'required',
+                'password' => 'required',
+                'confirmpass' => 'required|same:password'
+        ]); 
+        if($validator->fails()) {
+            return $this->sendError('Validation Error.', $validator->errors());
+        } else {
+            $enc_old_pass = bcrypt($input['password']);
+            $user = User::find($id);
+            if($user['password'] !== $enc_old_pass) {
+                //console.log($user->password);
+                return $this->sendError('Wrong Password.');
+            } else {
+                $success = [
+                    'message' => 'Change password success.'
+                ];
+                return $this->sendResponse($success, 'Update password success.');
             }
         }
     }
