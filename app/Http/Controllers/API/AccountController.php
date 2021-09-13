@@ -30,7 +30,6 @@ class AccountController extends BaseController
         if($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
-
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
@@ -58,7 +57,6 @@ class AccountController extends BaseController
                 'term_cond' => $user->term_cond,
                 'user_type' => $user->user_type
             ];
-
             return $this->sendResponse($success, 'User login successfully.');
         } else {
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
@@ -105,6 +103,36 @@ class AccountController extends BaseController
         }
     }
 
+    public function update_password($id, Request $request) 
+    {   
+        $input = $request-> all();
+        $validator = Validator::make($input,[
+                'lastpass' => 'required',
+                'password' => 'required',
+                'confirmpass' => 'required|same:password'
+        ]);
+
+        if($validator-> fails()){
+            return $this->sendError('Validation Error', $validator->errors());
+        } else {
+            $enc_old_pas = bcrypt($input['password']);
+            $user = User::find(auth()-> $user()->$id->update_password(['password' => Hash::make($request->$password)]));
+            if ($user['password'] == $enc_old_pas){
+                return $this -> sendError('Password salah');
+            }  else{
+                $success = [
+                    'lastpass' => $input['lastpass'],
+                    'password' => $input['password'],
+                    'confirmpass' => $input['confirmpass'],
+                    'message' => 'Change Password Success'
+                ];
+                return $this -> sendResponse($success,'Password Berhasil diubah');
+            }
+        }
+    }
+     
+     
+    
     public function logout(Request $request) {
         $request->user()->token()->revoke();
         return response()->json([
