@@ -7,6 +7,7 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
+use Hash;
 
 class AccountController extends BaseController
 {
@@ -112,27 +113,34 @@ class AccountController extends BaseController
                 'confirmpass' => 'required|same:password'
         ]);
 
-        if($validator-> fails()){
+        if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors());
         } else {
-            $enc_old_pas = bcrypt($input['password']);
-            $user = User::find(auth()-> $user()->$id->update_password(['password' => Hash::make($request->$password)]));
-            if ($user['password'] == $enc_old_pas){
-                return $this -> sendError('Password salah');
-            }  else{
-                $success = [
-                    'lastpass' => $input['lastpass'],
-                    'password' => $input['password'],
-                    'confirmpass' => $input['confirmpass'],
-                    'message' => 'Change Password Success'
-                ];
-                return $this -> sendResponse($success,'Password Berhasil diubah');
+            $user = User::find($id);
+            $input['password'] = bcrypt($input['password']);
+            error_log("Password Database :" . $user->password);
+            error_log("Password Input :" . $input['password']);
+            if($user->password !== $input['password']){
+                return $this->sendError($input['password']);
+            }else {
+                $userUpdate = User::where('id' , $id)->update([
+                    'password' => $input['password']
+                ]);
+                if($userUpdate) {
+                    return $this->sendError('Change password failure');
+                } else {
+                    $success =[
+                        'lastpass' => $input['lastpass'],
+                        'password' => $input['password'],
+                        'confirmpass' => $input['confirmpass'],
+                        'message' => 'Change Password Success'
+                    ];
+                    return $this->sendResponse($success, 'Password Berhasil Diubah');
+                }
             }
         }
     }
      
-     
-    
     public function logout(Request $request) {
         $request->user()->token()->revoke();
         return response()->json([
