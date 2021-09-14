@@ -13,19 +13,19 @@ class AccountController extends BaseController
 {
     public function register(Request $request) {
         $validator = Validator::make($request->all(), [
-            'fullname' => 'required',
-            'username' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'ktp' => 'required',
-            'province' => 'required',
-            'city' => 'required',
-            'district' => 'required',
-            'address' => 'required',
-            'password' => 'required',
-            'confirmpass' => 'required|same:password',
-            'term_cond' => 'required',
-            'user_type' => 'required'
+                'fullname' => 'required',
+                'username' => 'required',
+                'email' => 'required|email',
+                'phone' => 'required',
+                'ktp' => 'required',
+                'province' => 'required',
+                'city' => 'required',
+                'district' => 'required',
+                'address' => 'required',
+                'password' => 'required',
+                'confirmpass' => 'required|same:password',
+                'term_cond' => 'required',
+                'user_type' => 'required'
         ]);
 
         if($validator->fails()) {
@@ -36,9 +36,8 @@ class AccountController extends BaseController
         $user = User::create($input);
         $success = [
             'state' => 'Register success'
-        ];
-
-        return $this->sendResponse($success, 'User register successfully.');
+            ];
+            return $this->sendResponse($success, 'User register successfully.');
     }
 
     public function login(Request $request) {
@@ -67,13 +66,13 @@ class AccountController extends BaseController
     public function update_data_user($id, Request $request) {
         $input = $request->all();
         $validator = Validator::make($input, [
-            'username' => 'required',
-            'email' => 'required|email',
-            'phone' => 'required',
-            'ktp' => 'required',
-            'province' => 'required',
-            'city' => 'required',
-            'district' => 'required'
+                'username' => 'required',
+                'email' => 'required|email',
+                'phone' => 'required',
+                'ktp' => 'required',
+                'province' => 'required',
+                'city' => 'required',
+                'district' => 'required'
         ]);
         if($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
@@ -87,17 +86,18 @@ class AccountController extends BaseController
                 'city' => $input['city'],
                 'district' => $input['district']
             ]);
+            
             if(!$user) {
                 return $this->sendError('Update fails.');
             } else {
                 $success = [
-                    'username' => $input['username'],
-                    'email' => $input['email'],
-                    'phone' => $input['phone'],
-                    'ktp' => $input['ktp'],
-                    'province' => $input['province'],
-                    'city' => $input['city'],
-                    'disrict' =>$input['district']
+                'username' => $input['username'],
+                'email' => $input['email'],
+                'phone' => $input['phone'],
+                'ktp' => $input['ktp'],
+                'province' => $input['province'],
+                'city' => $input['city'],
+                'disrict' =>$input['district']
                 ];
                 return $this->sendResponse($success, 'Update success.');
             }
@@ -112,11 +112,9 @@ class AccountController extends BaseController
                 'password' => 'required',
                 'confirmpass' => 'required|same:password'
         ]);
-
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors());
         } else {
-           
             $user = User::where(['id' => $id])->first();
             // $user = User::find(auth()-> $user()->$id->update_password(['password' => Hash::make($request->$password)]));
             if (!Hash::check($input['lastpass'],$user->password)) {
@@ -125,14 +123,17 @@ class AccountController extends BaseController
                 $user->password = Hash::make($request->password);
                 $user->save();
                 $success = [
-                    'lastpass' => $input['lastpass'],
-                    'password' => $input['password'],
-                    'confirmpass' => $input['confirmpass'],
-                    'message' => 'Change Password Success'
+                'lastpass' => $input['lastpass'],
+                'password' => $input['password'],
+                'confirmpass' => $input['confirmpass'],
+                'message' => 'Change Password Success'
                 ];
                 return $this ->sendResponse($success,'Password Berhasil diubah');
             }
         }
+    }
+
+    public function update_bank_account($id, Request $request){
     }
 
      
