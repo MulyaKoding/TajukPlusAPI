@@ -22,7 +22,7 @@ use App\Http\Controllers\API\PlaceController;
 Route::post('register', [AccountController::class, 'register']);
 Route::post('login', [AccountController::class, 'login']);
 Route::put('updateuser/{id}', [AccountController::class, 'update_data_user']);
-Route::put('updatepassword/{id}',[AccountController::class, 'update_password']);
+Route::post('updatepassword/{id}',[AccountController::class, 'update_password']);
 Route::resource('news', NewsController::class);
 Route::resource('video', VideoController::class);
 Route::get('provinces', [PlaceController::class, 'getProvinces']);

@@ -116,30 +116,25 @@ class AccountController extends BaseController
         if($validator->fails()){
             return $this->sendError('Validation Error', $validator->errors());
         } else {
-            $user = User::find($id);
-            $input['password'] = bcrypt($input['password']);
-            error_log("Password Database :" . $user->password);
-            error_log("Password Input :" . $input['password']);
-            if($user->password !== $input['password']){
-                return $this->sendError($input['password']);
-            }else {
-                $userUpdate = User::where('id' , $id)->update([
-                    'password' => $input['password']
-                ]);
-                if($userUpdate) {
-                    return $this->sendError('Change password failure');
-                } else {
-                    $success =[
-                        'lastpass' => $input['lastpass'],
-                        'password' => $input['password'],
-                        'confirmpass' => $input['confirmpass'],
-                        'message' => 'Change Password Success'
-                    ];
-                    return $this->sendResponse($success, 'Password Berhasil Diubah');
-                }
+           
+            $user = User::where(['id' => $id])->first();
+            // $user = User::find(auth()-> $user()->$id->update_password(['password' => Hash::make($request->$password)]));
+            if (!Hash::check($input['lastpass'],$user->password)) {
+                return $this->sendError('Password salah');
+            }else{
+                $user->password = Hash::make($request->password);
+                $user->save();
+                $success = [
+                    'lastpass' => $input['lastpass'],
+                    'password' => $input['password'],
+                    'confirmpass' => $input['confirmpass'],
+                    'message' => 'Change Password Success'
+                ];
+                return $this ->sendResponse($success,'Password Berhasil diubah');
             }
         }
     }
+
      
     public function logout(Request $request) {
         $request->user()->token()->revoke();
