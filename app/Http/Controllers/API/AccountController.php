@@ -134,9 +134,40 @@ class AccountController extends BaseController
     }
 
     public function update_bank_account($id, Request $request){
+        $input =$request-> all();
+        $validator = validator::make(
+         $input,[
+             'ownerbank' => 'required',
+             'bankname' => 'required',
+             'accountnumber' => 'required',
+             'city' => 'required',
+             'district' => 'required'
+         ]);
+        if($validator -> fails()){
+            return $this->sendError('Validation Error', $validator->errors());
+        }else {
+            $user = User::where('id' , $id)->update([
+                'ownerbank' => $input['ownerbank'],
+                'bankname' => $input['bankname'],
+                'accountnumber' => $input['accountnumber'],
+                'city' => $input['city'],
+                'district' => $input['district']
+            ]);
+            
+            if(!$user) {
+                return $this->sendError('Update fails.');
+            } else {
+                $success = [
+                'ownerbank' => $input['ownerbank'],
+                'bankname' => $input['bankname'],
+                'accountnumber' => $input['accountnumber'],
+                'city' => $input['city'],
+                'disrict' =>$input['district']
+                ];
+                return $this->sendResponse($success, 'Update success.');
+            }
+        }
     }
-
-     
     public function logout(Request $request) {
         $request->user()->token()->revoke();
         return response()->json([
