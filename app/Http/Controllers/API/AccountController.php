@@ -27,7 +27,6 @@ class AccountController extends BaseController
                 'term_cond' => 'required',
                 'user_type' => 'required'
         ]);
-
         if($validator->fails()) {
             return $this->sendError('Validation Error.', $validator->errors());
         }
@@ -35,7 +34,7 @@ class AccountController extends BaseController
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
         $success = [
-            'state' => 'Register success'
+                 'state' => 'Register success'
             ];
             return $this->sendResponse($success, 'User register successfully.');
     }
@@ -136,31 +135,30 @@ class AccountController extends BaseController
     public function update_bank_account($id, Request $request){
         $input =$request-> all();
         $validator = validator::make(
-         $input,[
-             'ownerbank' => 'required',
-             'bankname' => 'required',
-             'accountnumber' => 'required',
-             'city' => 'required',
-             'district' => 'required'
+        $input,[
+                'ownerbank' => 'required',
+                'accountnumber' => 'required',
+                'bankname' => 'required',
+                'city' => 'required',
+                'district' => 'required'
          ]);
         if($validator -> fails()){
             return $this->sendError('Validation Error', $validator->errors());
         }else {
             $user = User::where('id' , $id)->update([
                 'ownerbank' => $input['ownerbank'],
-                'bankname' => $input['bankname'],
                 'accountnumber' => $input['accountnumber'],
+                'bankname' => $input['bankname'],
                 'city' => $input['city'],
                 'district' => $input['district']
             ]);
-            
             if(!$user) {
                 return $this->sendError('Update fails.');
             } else {
                 $success = [
                 'ownerbank' => $input['ownerbank'],
-                'bankname' => $input['bankname'],
                 'accountnumber' => $input['accountnumber'],
+                'bankname' => $input['bankname'],
                 'city' => $input['city'],
                 'disrict' =>$input['district']
                 ];
@@ -168,10 +166,11 @@ class AccountController extends BaseController
             }
         }
     }
+    
     public function logout(Request $request) {
         $request->user()->token()->revoke();
         return response()->json([
-            'message' => 'Logout successfully.'
+                'message' => 'Logout successfully.'
         ]);
     }    
 }

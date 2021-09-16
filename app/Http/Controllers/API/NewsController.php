@@ -7,6 +7,8 @@ use App\Http\Controllers\API\BaseController as BaseController;
 use App\Models\News;
 use Validator;
 use App\Http\Resources\News as NewsResource;
+use Hash;
+use Illuminate\Support\Facedes\Auth;
 
 class NewsController extends BaseController
 {
@@ -21,5 +23,62 @@ class NewsController extends BaseController
             return $this->sendError('News not found.');
         }
         return $this->sendResponse(new NewsResource($news), 'News detail retrieved successfully.');
+    }
+
+    public function delete_news($id, Request $request){
+        $news = News::find($id);
+        $validator = Validator::make($input,[
+            'id' => 'required',
+            'title' => 'required',
+            'writer' => 'required',
+            'category' => 'required',
+            'tag' => 'required',
+            'viewed' => 'required',
+            'shared' => 'required',
+            'liked' => 'required',
+            'content' => 'required',
+            'cover' => 'required',
+            'created_at' => 'required',
+            'updated_at' => 'required'
+        ]); 
+
+        if ($validator-> fails()){
+            return $this->sendError('Validation Error.', $validator->errors());
+        }else{
+            $user = User::where('id', $id)->delete([
+             'id' => $input['id'],
+             'title' => $input['title'],
+             'writer' => $input ['writer'],
+             'category' => $input['category'] ,
+             'tag' => $input['tag'],
+             'viewed' => $input['viewed'],
+             'shared' => $input['shared'],
+             'liked' => $input['liked'],
+             'content' => $input['content'],
+             'cover' => $input['cover'],
+             'created_at' =>$input['created_at'],
+             'updated_at' => $input['updated_at']  
+            ]);
+
+            if(!$user){
+                return $this->sendError('Delete Fails');
+            } else {
+                $success =[
+              'id' => $input['id'],
+              'title' => $input['title'],
+              'writer' => $input['writer'],
+              'category'=> $input['category'],
+              'tag' => $input['tag'],
+              'viewed' => $input['viewed'],
+              'shared' => $input['shared'],
+              'liked' => $input['liked'],
+              'content' => $input['content'],
+              'cover' => $input['cover'],
+              'created_at' => $input['created_at'],
+              'updated_at' => $input['updated_at']
+                ];
+                return $this->sendResponse($success, 'Delete News Success');
+            }
+        }
     }
 }

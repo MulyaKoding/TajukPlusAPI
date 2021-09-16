@@ -18,12 +18,13 @@ use App\Http\Controllers\API\PlaceController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
 Route::post('register', [AccountController::class, 'register']);
 Route::post('login', [AccountController::class, 'login']);
 Route::put('updateuser/{id}', [AccountController::class, 'update_data_user']);
 Route::post('updatepassword/{id}',[AccountController::class, 'update_password']);
-Route::post('updateBankAccount/{id}',[AccountController::class, 'update_bank_account']);
+Route::put('updateBankAccount/{id}',[AccountController::class, 'update_bank_account']);
+Route::delete('deleteNews/{id}',[NewsController::class, 'delete_news']);
+Route::get('listNews/{id}', [NewsController::class, 'list']);
 Route::resource('news', NewsController::class);
 Route::resource('video', VideoController::class);
 Route::get('provinces', [PlaceController::class, 'getProvinces']);
