@@ -34,6 +34,8 @@ class PlaceController extends BaseController
         }
     }
 
+
+    
     public function getDistricts($id) {
         if(!$id){
             $districts = Districts:: all();
