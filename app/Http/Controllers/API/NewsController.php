@@ -27,6 +27,7 @@ class NewsController extends BaseController
 
     public function delete_news($id, Request $request){
         $news = News::find($id);
+        $news -> delete();
         $validator = Validator::make($input,[
             'id' => 'required',
             'title' => 'required',
