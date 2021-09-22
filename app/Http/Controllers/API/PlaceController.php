@@ -45,6 +45,7 @@ class PlaceController extends BaseController
         }
         return $this->sendResponse(DistrictResource::collection($districts), 'Districts successfully retrieved.');
     }
+    
     }
 
     public function getSubdistricts($id) {
