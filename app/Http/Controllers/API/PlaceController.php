@@ -33,8 +33,6 @@ class PlaceController extends BaseController
             return $this->sendResponse(CityResource::collection($cities), 'Cities successfully retrieved.');
         }
     }
-
-
     
     public function getDistricts($id) {
         if(!$id){

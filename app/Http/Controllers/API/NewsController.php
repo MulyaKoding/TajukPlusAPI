@@ -15,7 +15,7 @@ class NewsController extends BaseController
     public function index() {
         $news = News::all();
         return $this->sendResponse(NewsResource::collection($news), 'All news retrieved.');
-    }
+    } 
 
     public function show($id) {
         $news = News::find($id);
@@ -23,6 +23,11 @@ class NewsController extends BaseController
             return $this->sendError('News not found.');
         }
         return $this->sendResponse(new NewsResource($news), 'News detail retrieved successfully.');
+    }
+
+    public function getNews() {
+        $news = News::all();
+        return $this->sendResponse(NewsResource::collection($news), 'News successfully retrieved.');
     }
 
     public function delete_news($id, Request $request){
