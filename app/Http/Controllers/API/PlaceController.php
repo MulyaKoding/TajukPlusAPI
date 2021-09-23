@@ -43,9 +43,8 @@ class PlaceController extends BaseController
         if (is_null($districts)) {
             return $this->sendError('Districts not found.');
         }
-        return $this->sendResponse(DistrictResource::collection($districts), 'Districts successfully retrieved.');
-    }
-    
+         return $this->sendResponse(DistrictResource::collection($districts), 'Districts successfully retrieved.');
+      }
     }
 
     public function getSubdistricts($id) {

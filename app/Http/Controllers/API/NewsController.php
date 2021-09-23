@@ -65,7 +65,6 @@ class NewsController extends BaseController
              'created_at' =>$input['created_at'],
              'updated_at' => $input['updated_at']  
             ]);
-
             if(!$user){
                 return $this->sendError('Delete Fails');
             } else {
